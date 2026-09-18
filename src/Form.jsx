@@ -178,7 +178,7 @@ export default function Form() {
                             {
                                 students.length === 0 ? (
                                     <tr>
-                                        <td style={{ textAlign: "center" }} colSpan="6">No student</td>
+                                        <td style={{ textAlign: "center" }} colSpan="7">No student</td>
                                     </tr>
                                 ) : (
                                     students.map((item, index) => {
