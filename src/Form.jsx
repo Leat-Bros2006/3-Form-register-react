@@ -2,34 +2,30 @@ import { useState } from "react";
 
 export default function Form() {
 
-    const [students, setStudents] = useState([]);
+    let [name, setName] = useState("")
+    let [email, setEmail] = useState("")
+    let [phone, setPhone] = useState("")
+    let [gender, setGender] = useState("")
+    let [course, setCourse] = useState("")
+    let [students, setStudents] = useState([])
 
-    const [fullname, setFullname] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [gender, setGender] = useState("");
-    const [course, setCourse] = useState();
+    let [error, setError] = useState({})
 
-    const [error, setError] = useState({})
+    console.log(error)
 
-    // validate form
-    const validate = () => {
+    function handleValidate() {
         let newError = {}
 
-        if (!fullname.trim()) {
-            newError.fullname = "Full name is required"
+        if (!name.trim()) {
+            newError.name = "Please enter your name!"
         }
 
         if (!email.trim()) {
-            newError.email = "Email is required"
-        } else if (!email.includes("@")) {
-            newError.email = "Invalid email"
+            newError.email = "Please enter your email!"
         }
 
-        if (!phone.trim()) {
-            newError.phone = "Phone is requied";
-        } else if (phone.length < 9) {
-            newError.phone = "Phone number must be at least 9 digits"
+        if (!phone) {
+            newError.phone = "Please enter your phone number"
         }
 
         if (!gender) {
@@ -42,145 +38,124 @@ export default function Form() {
 
         setError(newError)
 
-        return Object.keys(newError).length === 0
+        return Object.keys(newError).length === 0;
+
     }
 
-    // form
-    const handleSubmit = () => {
+    function handleRegister() {
 
-        let isValidate = validate()
+        let resultValidate = handleValidate()
 
-        if (!isValidate) {
-            return;
+        if (!resultValidate) {
+            return
         }
 
-        // បង្កើត Object សម្រាប់សិស្សម្នាក់
-        const newStudent = {
-            id: Date.now(),
-            fullname: fullname,
-            email: email,
-            phone: phone,
-            gender: gender,
-            course: course
-        };
+        let newStudent = {
+            ids: Date.now(),
+            names: name,
+            emails: email,
+            phones: phone,
+            genders: gender,
+            courses: course
+        }
 
-        // បញ្ចូលសិស្សថ្មីទៅក្នុង Array
-        setStudents([
-            ...students,
-            newStudent
-        ]);
+        setStudents([...students, newStudent])
 
-        // Clear Form បន្ទាប់ពី Register
-        setFullname("");
-        setEmail("");
-        setPhone("");
-        setGender("");
-        setCourse("");
-    };
+        // console.log(students)
+
+        // clear value
+        setName("")
+        setEmail("")
+        setPhone("")
+        setGender("")
+        setCourse("")
+    }
+
+
 
     return (
-        <div className="container">
+        <main className="container">
             {/* FORM */}
             <div className="form-card">
                 <h2>Student Registration</h2>
                 <p>Fill in your information below</p>
-                <section>
+                <form>
                     <div className="input-group">
                         <label>Full Name</label>
                         <input
+                            className={error.name ? "input-error" : ""}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             type="text"
                             placeholder="Enter your full name"
-                            value={fullname}
-                            onChange={(e) => setFullname(e.target.value)}
                         />
                         {
-                            error.fullname ? (
-                                <small className="error">{error.fullname}</small>
+                            error.name ? (
+                                <small className="error">{error.name}</small>
                             ) : null
                         }
                     </div>
                     <div className="input-group">
                         <label>Email</label>
                         <input
-                            type="email"
-                            placeholder="Enter your email"
+                            className={error.email ? "input-error" : ""}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            type="email"
+                            placeholder="Enter your email"
                         />
-                        {
-                            error.email ? (
-                                <small className="error">{error.email}</small>
-                            ) : null
-                        }
+                        {error.email ? <small className="error">{error.email}</small> : ""}
                     </div>
                     <div className="input-group">
                         <label>Phone</label>
                         <input
-                            type="number"
-                            placeholder="Enter phone number"
+                            className={error.phone ? "input-error" : ""}
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
+                            type="text"
+                            placeholder="Enter phone number"
                         />
-                        {
-                            error.phone ? (
-                                <small className="error">{error.phone}</small>
-                            ) : null
-                        }
+                        {error.phone ? <small className="error">{error.phone}</small> : ""}
                     </div>
                     <div className="input-group">
                         <label>Gender</label>
                         <div className="gender">
                             <label>
                                 <input
-                                    type="radio"
-                                    name="gender"
                                     value="Male"
-                                    checked={gender === "Male"}
+                                    checked={gender == "Male"}
+                                    name="gender"
                                     onChange={(e) => setGender(e.target.value)}
-                                />
-                                Male
+                                    type="radio" /> Male
                             </label>
                             <label>
                                 <input
-                                    type="radio"
-                                    name="gender"
                                     value="Female"
-                                    checked={gender === "Female"}
+                                    checked={gender == "Female"}
+                                    name="gender"
                                     onChange={(e) => setGender(e.target.value)}
-                                />
-                                Female
+                                    type="radio"
+                                /> Female
                             </label>
                         </div>
-                        {
-                            error.gender ? (
-                                <small className="error">{error.gender}</small>
-                            ) : null
-                        }
+                        {error.gender ? <small style={{ marginTop: 0 }} className="error">{error.gender}</small> : ""}
                     </div>
                     <div className="input-group">
                         <label>Course</label>
                         <select
-                            value={course}
                             onChange={(e) => setCourse(e.target.value)}
+                            className={error.course ? "input-error" : ""}
                         >
-                            <option>Choose course</option>
-                            <option>React JS</option>
-                            <option>Node JS</option>
-                            <option>Python</option>
-                            <option>UI/UX</option>
+                            <option value="">Select Course</option>
+                            <option value="React JS">React JS</option>
+                            <option value="Node JS">Node JS</option>
+                            <option value="Python">Python</option>
+                            <option value="UI/UX">UI/UX</option>
                         </select>
-                        {
-                            error.course ? (
-                                <small className="error">
-                                    {error.course}
-                                </small>
-                            ) : null
-                        }
+                        {error.course ? <small className="error">{error.course}</small> : ""}
                     </div>
-                    <button onClick={handleSubmit} type="button">
-                        Register
-                    </button>
-                </section>
+                    <button onClick={handleRegister} type="button"> Register </button>
+                </form>
             </div>
 
             {/* TABLE */}
@@ -196,25 +171,38 @@ export default function Form() {
                                 <th>Phone</th>
                                 <th>Gender</th>
                                 <th>Course</th>
+                                <th>Active</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                students.map((student, index) => (
-                                    <tr key={student.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{student.fullname}</td>
-                                        <td>{student.email}</td>
-                                        <td>{student.phone}</td>
-                                        <td>{student.gender}</td>
-                                        <td>{student.course}</td>
+                                students.length === 0 ? (
+                                    <tr>
+                                        <td style={{ textAlign: "center" }} colSpan="6">No student</td>
                                     </tr>
-                                ))
+                                ) : (
+                                    students.map((item, index) => {
+                                        return (
+                                            <tr key={item.ids}>
+                                                <td style={{ textAlign: "center" }}>{index + 1}</td>
+                                                <td>{item.names}</td>
+                                                <td>{item.emails}</td>
+                                                <td>{item.phones}</td>
+                                                <td>{item.genders}</td>
+                                                <td>{item.courses}</td>
+                                                <td className="btn-active">
+                                                    <button className="btn-delete">Delete</button>
+                                                    <button className="btn-edit">Edit</button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                )
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </main>
     );
 }

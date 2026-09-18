@@ -60,12 +60,6 @@ body {
     font-size: 15px;
 }
 
-.error{
-    color: red;
-    display: block;
-    margin-top: 5px;
-}
-
 .input-group input:focus,
 .input-group select:focus {
     border-color: #2563eb;
@@ -148,7 +142,37 @@ table tbody tr:hover {
     background: #ececec;
 }
 
+.input-error{
+    border: 1px solid red !important;
+}
 
+.error{
+    color: red;
+    margin-top: 4px;
+    display: block;
+}
+
+.btn-active{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-delete, .btn-edit{
+    padding: 8px 15px !important;
+    font-size: 12px;
+    background-color: red;
+    
+}
+
+.btn-delete:hover{
+    background-color: rgb(215, 3, 3);
+    
+}
+
+.btn-edit{
+    background-color: blue;
+}
 
 /* ======= Responsive ======= */
 @media (max-width: 1120px) {

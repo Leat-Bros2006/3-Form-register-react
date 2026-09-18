@@ -9,35 +9,49 @@ export default function FormTest() {
     let [course, setCourse] = useState("")
     let [students, setStudents] = useState([])
 
+
     let [error, setError] = useState({})
 
-    function handleValidate(){
+    function validation() {
         let newError = {}
 
-        if(!name.trim()){
-            newError.name = "Name is requeired"
+        if (name == "") {
+            newError.name = "Please enter your name!"
         }
 
-        if(!email.item()){
-            newError.email = "Email is required"
+        if (email == "") {
+            newError.email = "Please enter your email!"
         }
 
-        if(!phone.trim()){
-            newError.email = "Phone is required"
+        if (phone == "") {
+            newError.phone = "Please enter your phone number!"
         }
 
-        if(!gender){
-            newError.gender = "Please select gender"
+        if (gender == "") {
+            newError.gender = "Please select gender!"
         }
 
-        if(!course){
-            newError.course = "Please choose course"
+        if (course == "") {
+            newError.course = "Please select course!"
         }
 
         setError(newError)
+
+        // return Object.keys(newError).length === 0
+        return Object.keys(newError).length === 0
+
     }
 
+    console.log(error)
+
+
     function handleRegister() {
+
+        let handleValidation = validation()
+
+        if (!handleValidation) {
+            return;
+        }
 
         let newStudent = {
             ids: Date.now(),
@@ -77,6 +91,13 @@ export default function FormTest() {
                             type="text"
                             placeholder="Enter your full name"
                         />
+                        {/* {
+                            error.name ? <small>{error.name}</small> : ""
+                        } */}
+
+                        {
+                            error.name && <small className="error">{error.name}</small>
+                        }
                     </div>
                     <div className="input-group">
                         <label>Email</label>
@@ -86,15 +107,21 @@ export default function FormTest() {
                             type="email"
                             placeholder="Enter your email"
                         />
+                        {
+                            error.email ? <small className="error">{error.email}</small> : ""
+                        }
                     </div>
                     <div className="input-group">
                         <label>Phone</label>
                         <input
-                        value={phone}
+                            value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             type="text"
                             placeholder="Enter phone number"
                         />
+                        {
+                            error.phone ? <small className="error">{error.phone}</small> : ""
+                        }
                     </div>
                     <div className="input-group">
                         <label>Gender</label>
@@ -117,18 +144,25 @@ export default function FormTest() {
                                 /> Female
                             </label>
                         </div>
+                        {
+                            error.gender ? <small className="error">{error.gender}</small> : ""
+                        }
                     </div>
                     <div className="input-group">
                         <label>Course</label>
                         <select
+                            value={course}
                             onChange={(e) => setCourse(e.target.value)}
                         >
-                            <option value="">Select Course</option>
+                            <option value="" disabled>Select Course</option>
                             <option value="React JS">React JS</option>
                             <option value="Node JS">Node JS</option>
                             <option value="Python">Python</option>
                             <option value="UI/UX">UI/UX</option>
                         </select>
+                        {
+                            error.course ? <small className="error">{error.course}</small> : ""
+                        }
                     </div>
                     <button onClick={handleRegister} type="button"> Register </button>
                 </form>
@@ -151,19 +185,26 @@ export default function FormTest() {
                         </thead>
                         <tbody>
                             {
-                                students.map((item, index) => {
-                                    return (
-                                        <tr key={item.ids}>
-                                            <td>{index + 1}</td>
-                                            <td>{item.names}</td>
-                                            <td>{item.emails}</td>
-                                            <td>{item.phones}</td>
-                                            <td>{item.genders}</td>
-                                            <td>{item.courses}</td>
-                                        </tr>
-                                    )
-                                })
+                                students.length === 0 ? (
+                                    <tr>
+                                        <td style={{textAlign: "center"}} colSpan="6">No Students</td>
+                                    </tr>
+                                ) : (
+                                    students.map((item, index) => {
+                                        return (
+                                            <tr key={item.ids}>
+                                                <td style={{ textAlign: "center" }}>{index + 1}</td>
+                                                <td>{item.names}</td>
+                                                <td>{item.emails}</td>
+                                                <td>{item.phones}</td>
+                                                <td>{item.genders}</td>
+                                                <td>{item.courses}</td>
+                                            </tr>
+                                        )
+                                    })
+                                )
                             }
+
                         </tbody>
                     </table>
                 </div>
